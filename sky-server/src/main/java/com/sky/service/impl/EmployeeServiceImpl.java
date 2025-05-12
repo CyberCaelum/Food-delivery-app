@@ -109,4 +109,52 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return new PageResult(page.getTotal(),page.getResult());
     }
+
+    /**
+     * @description: 启用禁用员工
+     * @author: CyberAstra
+     * @date: 2025/5/12 at 19:56:55
+     * @param: status
+     * @param: id
+     **/
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Employee employee = Employee.builder()
+                .id(id)
+                .status(status)
+                .updateTime(LocalDateTime.now())
+                .updateUser(BaseContext.getCurrentId())
+                .build();
+
+        employeeMapper.update(employee);
+    }
+
+    /**
+     * @description: 通过id查找员工
+     * @author: CyberAstra
+     * @date: 2025/5/12 at 21:18:41
+     * @param: id
+     * @return: com.sky.entity.Employee
+     **/
+    @Override
+    public Employee selectById(Long id) {
+        Employee employee = employeeMapper.selectByid(id);
+        employee.setPassword("***");
+        return employee;
+    }
+
+    /**
+     * @description: 修改员工信息
+     * @author: CyberAstra
+     * @date: 2025/5/12 at 21:46:11
+     * @param: employeeDTO
+     **/
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.update(employee);
+    }
 }

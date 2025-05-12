@@ -106,4 +106,50 @@ public class EmployeeController {
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(pageResult);
     }
+
+    /**
+     * @description: 启用禁用员工
+     * @author: CyberAstra
+     * @date: 2025/5/12 at 19:54:15
+     * @param: status
+     * @param: id
+     * @return: com.sky.result.Result
+     **/
+    @ApiOperation("启用禁用员工")
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status,Long id){
+        log.info("启用禁用员工：状态{},员工id{}", status, id);
+        employeeService.startOrStop(status,id);
+        return Result.success();
+    }
+
+    /**
+     * @description: 通过id查找员工
+     * @author: CyberAstra
+     * @date: 2025/5/12 at 21:15:47
+     * @param: id
+     * @return: com.sky.result.Result<com.sky.entity.Employee>
+     **/
+    @ApiOperation("通过id查找员工")
+    @GetMapping("/{id}")
+    public Result<Employee> selectById(@PathVariable Long id){
+        log.info("查找员工：id：{}",id);
+        Employee employee = employeeService.selectById(id);
+        return Result.success(employee);
+    }
+
+    /**
+     * @description: 修改员工
+     * @author: CyberAstra
+     * @date: 2025/5/12 at 21:53:44
+     * @param: employeeDTO
+     * @return: com.sky.result.Result
+     **/
+    @ApiOperation("修改员工")
+    @PutMapping
+    public Result update(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("修改员工：{}", employeeDTO);
+        employeeService.update(employeeDTO);
+        return Result.success();
+    }
 }
