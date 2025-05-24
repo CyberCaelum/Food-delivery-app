@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.sky.mapper.SetmealMapper">
+    
+    <select id="PageQuery" resultType="com.sky.vo.SetmealVO">
+        select setmeal.id, category_id, setmeal.name, price, setmeal.status, description, image, setmeal.update_time,
+               category.name as category_name from setmeal,category
+        <where>
+            category_id = category.id
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        order by setmeal.create_time desc
+    </select>
+    
+    <update id="updateSetmeal">
+        update setmeal
+            <set>
+                <if test="categoryId != null">
+                    category_id = #{categoryId},
+                </if>
+                <if test="description != null and description != ''">
+                    description = #{description},
+                </if>
+                <if test="image != null and image != ''">
+                    image = #{image},
+                </if>
+                <if test="name != null and name != ''">
+                    name  = #{name},
+                </if>
+                <if test="price != null">
+                    price = #{price},
+                </if>
+                <if test="status != null">
+                    status = #{status},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime},
+                </if>
+                <if test="updateUser != null">
+                    update_user = #{updateUser}
+                </if>
+            </set>
+        where id = #{id}
+    </update>
+</mapper>

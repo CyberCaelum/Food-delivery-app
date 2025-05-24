@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.sky.entity.SetmealDish;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -21,4 +22,12 @@ public interface SetmealDishMapper {
      * @return: java.util.List<java.lang.Long>
      **/
     List<Long> getSetmealIdByDishIds(List<Long> dishIds);
+
+    /**
+     * @description: 修改套餐中的菜品
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 15:53:15
+     * @param: setmealDishes
+     **/
+    void updateSetmealDish(SetmealDish setmealDishes);
 }

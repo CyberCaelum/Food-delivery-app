@@ -99,7 +99,7 @@ public class EmployeeController {
      * @param: employeePageQueryDTO
      * @return: com.sky.result.Result<com.sky.result.PageResult>
      **/
-    @GetMapping("page")
+    @GetMapping("/page")
     @ApiOperation("分页查询")
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
         log.info("分页查询参数:{}", employeePageQueryDTO);

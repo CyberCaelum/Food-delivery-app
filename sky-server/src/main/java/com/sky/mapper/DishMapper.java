@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.alibaba.fastjson.JSONPatch;
 import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
 import com.sky.dto.DishPageQueryDTO;
@@ -9,6 +10,9 @@ import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 /**
  * @ClassName : DishMapper
@@ -65,4 +69,24 @@ public interface DishMapper {
      **/
     @Delete("delete from dish where id = #{id}")
     void deleteById(Long id);
+
+    /**
+     * @return
+     * @description: 根据分类id查找菜品
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 16:25:47
+     * @param: categoryId
+     */
+    @Select("select * from dish where category_id = #{categoryId}")
+    List<Dish> getByCategoryId(Long categoryId);
+
+    /**
+     * @description: 修改菜品
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 16:53:25
+     * @param: dish
+     **/
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Dish dish);
+
 }

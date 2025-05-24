@@ -1,0 +1,30 @@
+package com.sky.service;
+
+import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.result.PageResult;
+
+/**
+ * @ClassName : SetmealService
+ * @Description : 套餐Service
+ * @Author :  CyberCaelum
+ * @Date: 2025-05-23 19:36
+ */
+public interface SetmealService {
+    /**
+     * @description: 套餐分页查询
+     * @author: CyberAstra
+     * @date: 2025/5/23 at 20:00:19
+     * @param: setmealPageQueryDTO
+     * @return: com.sky.result.PageResult
+     **/
+    PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    /**
+     * @description: 修改套餐
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 15:24:59
+     * @param: setmealDTO
+     **/
+    void updateSetmeal(SetmealDTO setmealDTO);
+}

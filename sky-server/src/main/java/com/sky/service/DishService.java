@@ -2,7 +2,9 @@ package com.sky.service;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
+import com.sky.vo.DishVO;
 
 import java.util.List;
 
@@ -38,4 +40,39 @@ public interface DishService {
      * @param: ids
      **/
     void deleteDish(List<Long> ids);
+
+    /**
+     * @description: 根据id查询菜品
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 16:05:19
+     * @param: id
+     * @return: com.sky.vo.DishVO
+     **/
+    DishVO getDishById(Long id);
+
+    /**
+     * @description: 根据分类id查找菜品
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 16:23:49
+     * @param: categoryId
+     * @return: java.util.List<com.sky.entity.Dish>
+     **/
+    List<Dish> getDishByCategoryId(Long categoryId);
+
+    /**
+     * @description: 菜品起售、停售
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 16:46:14
+     * @param: status
+     * @param: id
+     **/
+    void changeStatus(Integer status, Long id);
+
+    /**
+     * @description: 修改菜品
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 16:50:11
+     * @param: dishDTO
+     **/
+    void updateDish(DishDTO dishDTO);
 }

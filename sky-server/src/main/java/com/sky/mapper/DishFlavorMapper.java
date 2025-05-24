@@ -4,6 +4,7 @@ import com.sky.entity.DishFlavor;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -32,4 +33,21 @@ public interface DishFlavorMapper {
      **/
     @Delete("delete from dish_flavor where dish_id = #{dishId}")
     void deleteByDishId(Long dishId);
+
+    /**
+     * @description: 查询菜品的口味
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 16:11:34
+     * @return: java.util.List<com.sky.entity.DishFlavor>
+     **/
+    @Select("select * from dish_flavor where dish_id = #{dishId}")
+    List<DishFlavor> getFlavorByDishId(Long dishId);
+
+    /**
+     * @description: 修改菜品相关口味
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 17:01:42
+     * @param: id
+     **/
+    void update(DishFlavor flavor);
 }
