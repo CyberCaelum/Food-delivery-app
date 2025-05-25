@@ -54,4 +54,10 @@
         insert into setmeal (category_id, name, price, status, description, image, create_time, update_time, create_user, update_user)
             VALUE (#{categoryId},#{name},#{price},#{status},#{description},#{image},#{createTime},#{updateTime},#{createUser},#{updateUser})
     </insert>
+    <delete id="delete">
+        delete from setmeal where id in
+        <foreach collection="ids" close="(" open=")" separator="," index="id">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

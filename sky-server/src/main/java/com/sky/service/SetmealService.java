@@ -5,6 +5,8 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.vo.SetmealVO;
 
+import java.util.List;
+
 /**
  * @ClassName : SetmealService
  * @Description : 套餐Service
@@ -45,4 +47,21 @@ public interface SetmealService {
      * @return: com.sky.vo.SetmealVO
      **/
     SetmealVO getSetmealById(Long id);
+
+    /**
+     * @description: 套餐起售、停售
+     * @author: CyberAstra
+     * @date: 2025/5/25 at 14:29:17
+     * @param: status
+     * @param: id
+     **/
+    void changeStatus(Integer status, Long id);
+
+    /**
+     * @description: 批量删除套餐
+     * @author: CyberAstra
+     * @date: 2025/5/25 at 16:42:55
+     * @param: ids
+     **/
+    void deleteSetmeal(List<Long> ids);
 }

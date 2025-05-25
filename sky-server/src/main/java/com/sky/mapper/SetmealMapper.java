@@ -9,6 +9,9 @@ import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 /**
  * @ClassName : SetmealMapper
@@ -65,4 +68,24 @@ public interface SetmealMapper {
      **/
     @Select("select * from setmeal where id = #{id}")
     Setmeal getById(Long id);
+
+    /**
+     * @description: 套餐起售、停售
+     * @author: CyberAstra
+     * @date: 2025/5/25 at 14:30:50
+     * @param: status
+     * @param: id
+     **/
+    @AutoFill(value = OperationType.UPDATE)
+    @Update("update setmeal set update_time = #{updateTime},update_user = #{updateUser},status = #{status} " +
+            "where id = #{id}")
+    void changeStatus(Setmeal setmeal);
+
+    /**
+     * @description: 批量删除套餐
+     * @author: CyberAstra
+     * @date: 2025/5/25 at 16:46:20
+     * @param: ids
+     **/
+    void delete(List<Long> ids);
 }

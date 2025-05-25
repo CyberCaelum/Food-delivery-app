@@ -69,7 +69,6 @@ public class SetmealServiceImpl implements SetmealService {
                 setmealDish.setSetmealId(setmealId);
                 setmealDishMapper.saveSetmealDish(setmealDish);
             });
-
         }
     }
 
@@ -109,5 +108,38 @@ public class SetmealServiceImpl implements SetmealService {
         BeanUtils.copyProperties(setmeal,setmealVO);
         setmealVO.setSetmealDishes(setmealDishes);
         return setmealVO;
+    }
+
+    /**
+     * @description: 套餐起售、停售
+     * @author: CyberAstra
+     * @date: 2025/5/25 at 14:29:31
+     * @param: status
+     * @param: id
+     **/
+    @Override
+    public void changeStatus(Integer status, Long id) {
+        Setmeal setmeal = Setmeal.builder()
+                        .id(id)
+                        .status(status)
+                        .build();
+        setmealMapper.changeStatus(setmeal);
+    }
+
+    /**
+     * @description: 批量删除套餐
+     * @author: CyberAstra
+     * @date: 2025/5/25 at 16:43:08
+     * @param: ids
+     **/
+    @Transactional
+    @Override
+    public void deleteSetmeal(List<Long> ids) {
+        //删除套餐表中的信息
+        setmealMapper.delete(ids);
+        //删除套餐菜品表中的信息
+        ids.forEach(id->{
+            setmealDishMapper.deletBySetmealId(id);
+        });
     }
 }

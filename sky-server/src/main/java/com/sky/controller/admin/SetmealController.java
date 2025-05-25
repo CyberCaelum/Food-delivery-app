@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @ClassName : SetmealController
  * @Description : 套餐接口
@@ -87,5 +89,35 @@ public class SetmealController {
         log.info("根据id查询套餐:{}",id);
         SetmealVO setmealVO = setmealService.getSetmealById(id);
         return Result.success(setmealVO);
+    }
+
+    /**
+     * @description: 套餐起售、停售
+     * @author: CyberAstra
+     * @date: 2025/5/25 at 14:27:07
+     * @param: status
+     * @return: com.sky.result.Result
+     **/
+    @ApiOperation("套餐起售、停售")
+    @PostMapping("/status/{status}")
+    public Result changeStatus(@PathVariable Integer status,Long id){
+        log.info("套餐起售、停售:status{},id{}",status,id);
+        setmealService.changeStatus(status,id);
+        return Result.success();
+    }
+
+    /**
+     * @description: 批量删除套餐
+     * @author: CyberAstra
+     * @date: 2025/5/25 at 16:40:50
+     * @param: ids
+     * @return: com.sky.result.Result
+     **/
+    @ApiOperation("批量删除套餐")
+    @DeleteMapping
+    public Result deleteSetmeal(@RequestParam List<Long> ids){
+        log.info("批量删除套餐");
+        setmealService.deleteSetmeal(ids);
+        return Result.success();
     }
 }
