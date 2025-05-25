@@ -2,7 +2,6 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sky.annotation.AutoFill;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
@@ -15,6 +14,7 @@ import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -53,16 +53,61 @@ public class SetmealServiceImpl implements SetmealService {
      * @date: 2025/5/24 at 15:25:24
      * @param: setmealDTO
      **/
+    @Transactional
     @Override
     public void updateSetmeal(SetmealDTO setmealDTO) {
         Setmeal setmeal = new Setmeal();
         BeanUtils.copyProperties(setmealDTO,setmeal);
         setmealMapper.updateSetmeal(setmeal);
         List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        Long setmealId = setmealDTO.getId();
+        //将套餐中的菜品全部删除
+        setmealDishMapper.deletBySetmealId(setmealId);
+        //如果套餐中有菜品，将菜品全部存储
         if (setmealDishes != null && !setmealDishes.isEmpty()) {
             setmealDishes.forEach(setmealDish -> {
-                setmealDishMapper.updateSetmealDish(setmealDish);
+                setmealDish.setSetmealId(setmealId);
+                setmealDishMapper.saveSetmealDish(setmealDish);
+            });
+
+        }
+    }
+
+    /**
+     * @description: 新增套餐
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 18:16:48
+     * @param: setmealDTO
+     **/
+    @Transactional
+    @Override
+    public void saveSetmeal(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO,setmeal);
+        setmealMapper.saveSetmeal(setmeal);
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        if (setmealDishes != null && !setmealDishes.isEmpty()) {
+            setmealDishes.forEach(setmealDish -> {
+                setmealDish.setSetmealId(setmeal.getId());
+                setmealDishMapper.saveSetmealDish(setmealDish);
             });
         }
+    }
+
+    /**
+     * @description: 根据id查询套餐
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 20:54:38
+     * @param: id
+     * @return: com.sky.vo.SetmealVO
+     **/
+    @Override
+    public SetmealVO getSetmealById(Long id) {
+        Setmeal setmeal = setmealMapper.getById(id);
+        List<SetmealDish> setmealDishes = setmealDishMapper.getSetmealDishBySetmealId(id);
+        SetmealVO setmealVO = new SetmealVO();
+        BeanUtils.copyProperties(setmeal,setmealVO);
+        setmealVO.setSetmealDishes(setmealDishes);
+        return setmealVO;
     }
 }

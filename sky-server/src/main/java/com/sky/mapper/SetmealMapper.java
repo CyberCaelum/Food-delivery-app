@@ -6,6 +6,7 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.SetmealVO;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -45,4 +46,23 @@ public interface SetmealMapper {
      **/
     @AutoFill(value = OperationType.UPDATE)
     void updateSetmeal(Setmeal setmeal);
+
+    /**
+     * @description: 新增套餐
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 18:18:18
+     * @param: setmeal
+     **/
+    @AutoFill(value = OperationType.INSERT)
+    void saveSetmeal(Setmeal setmeal);
+
+    /**
+     * @description: 根据id查询套餐
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 20:55:50
+     * @param: id
+     * @return: com.sky.entity.Setmeal
+     **/
+    @Select("select * from setmeal where id = #{id}")
+    Setmeal getById(Long id);
 }

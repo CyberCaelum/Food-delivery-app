@@ -167,7 +167,7 @@ public class DishServiceImpl implements DishService {
         dishMapper.update(dish);
         Long dishId = dish.getId();
         List<DishFlavor> flavors = dishDTO.getFlavors();
-
+        //TODO 感觉可以将口味表中这个菜的口味全部删除，之后重新存入
         //如果口味表中有菜品相关的口味，更新口味
         if (dishFlavorMapper.getFlavorByDishId(dishId) != null && !dishFlavorMapper.getFlavorByDishId(dishId).isEmpty()){
             //如果口味不为空，增加菜品的口味

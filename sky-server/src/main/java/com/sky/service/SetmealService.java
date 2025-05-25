@@ -3,6 +3,7 @@ package com.sky.service;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.result.PageResult;
+import com.sky.vo.SetmealVO;
 
 /**
  * @ClassName : SetmealService
@@ -27,4 +28,21 @@ public interface SetmealService {
      * @param: setmealDTO
      **/
     void updateSetmeal(SetmealDTO setmealDTO);
+
+    /**
+     * @description: 新增套餐
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 18:16:31
+     * @param: setmealDTO
+     **/
+    void saveSetmeal(SetmealDTO setmealDTO);
+
+    /**
+     * @description: 根据id查询套餐
+     * @author: CyberAstra
+     * @date: 2025/5/24 at 20:54:20
+     * @param: id
+     * @return: com.sky.vo.SetmealVO
+     **/
+    SetmealVO getSetmealById(Long id);
 }
