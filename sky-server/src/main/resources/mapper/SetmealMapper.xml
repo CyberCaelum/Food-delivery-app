@@ -13,10 +13,10 @@
                 and category_id = #{categoryId}
             </if>
             <if test="name != null and name != ''">
-                and name = #{name}
+                and setmeal.name like concat('%',#{name},'%')
             </if>
             <if test="status != null">
-                and status = #{status}
+                and setmeal.status = #{status}
             </if>
         </where>
         order by setmeal.create_time desc
@@ -56,7 +56,7 @@
     </insert>
     <delete id="delete">
         delete from setmeal where id in
-        <foreach collection="ids" close="(" open=")" separator="," index="id">
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
             #{id}
         </foreach>
     </delete>
