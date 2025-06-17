@@ -47,7 +47,6 @@ public interface SetmealMapper {
      * @date: 2025/5/24 at 15:35:37
      * @param: setmeal
      **/
-    @AutoFill(value = OperationType.UPDATE)
     void updateSetmeal(Setmeal setmeal);
 
     /**
@@ -56,7 +55,6 @@ public interface SetmealMapper {
      * @date: 2025/5/24 at 18:18:18
      * @param: setmeal
      **/
-    @AutoFill(value = OperationType.INSERT)
     void saveSetmeal(Setmeal setmeal);
 
     /**
@@ -76,9 +74,7 @@ public interface SetmealMapper {
      * @param: status
      * @param: id
      **/
-    @AutoFill(value = OperationType.UPDATE)
-    @Update("update setmeal set update_time = #{updateTime},update_user = #{updateUser},status = #{status} " +
-            "where id = #{id}")
+    @Update("update setmeal set status = #{status} where id = #{id}")
     void changeStatus(Setmeal setmeal);
 
     /**

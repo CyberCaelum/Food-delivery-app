@@ -37,9 +37,8 @@ public interface CategoryMapper {
      * @date: 2025/5/16 at 17:14:04
      * @param: category
      **/
-    @AutoFill(value = OperationType.INSERT)
-    @Insert("insert into category (type, name, sort, status, create_time, update_time, create_user, update_user) VALUE " +
-            "(#{type},#{name},#{sort},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})")
+    @Insert("insert into category (type, name, sort, status) VALUE " +
+            "(#{type},#{name},#{sort},#{status})")
     void saveCategory(Category category);
 
     /**
@@ -48,7 +47,6 @@ public interface CategoryMapper {
      * @date: 2025/5/16 at 19:35:54
      * @param: category
      **/
-    @AutoFill(value = OperationType.UPDATE)
     void updateCategory(Category category);
 
     /**
@@ -59,7 +57,23 @@ public interface CategoryMapper {
      **/
     @Delete("delete from category where id = #{id}")
     void deleteCategory(Long id);
+
+    /**
+     * @description: 通过分类名查找分类
+     * @author: CyberAstra
+     * @date: 2025/6/17 at 16:04:54
+     * @param: name
+     * @return: com.sky.entity.Category
+     **/
     @Select("SELECT * from category where name = #{name}")
     Category selectCategory(String name);
+
+    /**
+     * @description: 通过类型查找分类
+     * @author: CyberAstra
+     * @date: 2025/6/17 at 16:05:51
+     * @param: type
+     * @return: java.util.List<com.sky.entity.Category>
+     **/
     List<Category> list(Integer type);
 }

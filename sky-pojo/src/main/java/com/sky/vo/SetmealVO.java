@@ -37,9 +37,6 @@ public class SetmealVO implements Serializable {
     //图片
     private String image;
 
-    //更新时间
-    private LocalDateTime updateTime;
-
     //分类名称
     private String categoryName;
 

@@ -39,7 +39,6 @@ public interface DishMapper {
      * @date: 2025/5/19 at 15:42:00
      * @param: dish
      **/
-    @AutoFill(value = OperationType.INSERT)
     void save(Dish dish);
 
     /**
@@ -71,11 +70,11 @@ public interface DishMapper {
     void deleteById(Long id);
 
     /**
-     * @return
      * @description: 根据分类id查找菜品
      * @author: CyberAstra
      * @date: 2025/5/24 at 16:25:47
      * @param: categoryId
+     * @return: java.util.List<com.sky.entity.Dish>
      */
     @Select("select * from dish where category_id = #{categoryId}")
     List<Dish> getByCategoryId(Long categoryId);
@@ -86,7 +85,6 @@ public interface DishMapper {
      * @date: 2025/5/24 at 16:53:25
      * @param: dish
      **/
-    @AutoFill(value = OperationType.UPDATE)
     void update(Dish dish);
 
 }

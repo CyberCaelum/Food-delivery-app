@@ -5,9 +5,10 @@
 <mapper namespace = "com.sky.mapper.DishMapper">
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into dish (name, category_id, price, image, description, create_time, update_time, create_user, update_user,status) value
-        (#{name},#{categoryId},#{price},#{image},#{description},#{createTime},#{updateTime},#{createUser},#{updateUser},#{status})
+        insert into dish (name, category_id, price, image, description,status) value
+        (#{name},#{categoryId},#{price},#{image},#{description},#{status})
     </insert>
+
     <select id="pageQuery" resultType="com.sky.vo.DishVO">
         select dish.*,category.name as category_name from dish left join category on dish.category_id = category.id
         <where>
@@ -21,8 +22,8 @@
                 and dish.status = #{status}
             </if>
         </where>
-        order by dish.update_time desc
     </select>
+
     <update id="update">
         update dish 
         <set>
@@ -41,12 +42,6 @@
             </if>
             <if test="status != null">
                 status = #{status},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
-            </if>
-            <if test="updateUser != null">
-                update_user = #{updateUser}
             </if>
         </set>
         where id = #{id}
