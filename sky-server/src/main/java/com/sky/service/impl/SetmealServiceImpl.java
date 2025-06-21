@@ -142,4 +142,16 @@ public class SetmealServiceImpl implements SetmealService {
             setmealDishMapper.deletBySetmealId(id);
         });
     }
+
+    /**
+     * @description: 根据费雷id查询套餐
+     * @author: CyberAstra
+     * @date: 2025/6/21 at 17:43:59
+     * @param: categoryId
+     * @return: java.util.List<com.sky.entity.Setmeal>
+     **/
+    @Override
+    public List<Setmeal> getByCategoryId(int categoryId) {
+        return setmealMapper.getByCategoryId(categoryId);
+    }
 }

@@ -88,4 +88,14 @@ public interface SetmealMapper {
      * @param: ids
      **/
     void delete(List<Long> ids);
+
+    /**
+     * @description: 根据分类id查询套餐
+     * @author: CyberAstra
+     * @date: 2025/6/21 at 17:41:42
+     * @param: categoryId
+     * @return: java.util.List<com.sky.entity.Setmeal>
+     **/
+    @Select("select * from setmeal where category_id = #{categoryId}")
+    List<Setmeal> getByCategoryId(int categoryId);
 }

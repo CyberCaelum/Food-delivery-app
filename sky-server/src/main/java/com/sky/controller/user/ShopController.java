@@ -30,6 +30,12 @@ public class ShopController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /**
+     * @description: 获取店铺营业状态
+     * @author: CyberAstra
+     * @date: 2025/6/21 at 17:30:34
+     * @return: com.sky.result.Result
+     **/
     @GetMapping("/status")
     @ApiOperation("获取店铺营业状态")
     public Result getStatus() {

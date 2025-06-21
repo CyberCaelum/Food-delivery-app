@@ -2,6 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Setmeal;
 import com.sky.result.PageResult;
 import com.sky.vo.SetmealVO;
 
@@ -64,4 +65,13 @@ public interface SetmealService {
      * @param: ids
      **/
     void deleteSetmeal(List<Long> ids);
+
+    /**
+     * @description: 根据分类id查询套餐
+     * @author: CyberAstra
+     * @date: 2025/6/21 at 17:40:01
+     * @param: categoryId
+     * @return: java.util.List<com.sky.entity.Setmeal>
+     **/
+    List<Setmeal> getByCategoryId(int categoryId);
 }

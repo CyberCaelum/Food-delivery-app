@@ -38,6 +38,7 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation("微信登录")
     public Result login(@RequestBody UserLoginDTO userLoginDTO){
+        log.info("用户登录：{}",userLoginDTO);
         UserLoginVO userLoginVO =  userService.login(userLoginDTO);
         return Result.success(userLoginVO);
     }
