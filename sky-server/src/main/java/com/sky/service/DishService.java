@@ -59,6 +59,8 @@ public interface DishService {
      **/
     List<Dish> getDishByCategoryId(Long categoryId);
 
+    List<DishVO> getDishByCategory(Long categoryId);
+
     /**
      * @description: 菜品起售、停售
      * @author: CyberAstra

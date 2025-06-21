@@ -10,6 +10,7 @@ import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,7 +152,20 @@ public class SetmealServiceImpl implements SetmealService {
      * @return: java.util.List<com.sky.entity.Setmeal>
      **/
     @Override
-    public List<Setmeal> getByCategoryId(int categoryId) {
+    public List<Setmeal> getByCategoryId(Long categoryId) {
         return setmealMapper.getByCategoryId(categoryId);
+    }
+
+    /**
+     * @description: 根据套餐id查询包含的菜品
+     * @author: CyberAstra
+     * @date: 2025/6/21 at 20:37:12
+     * @param: id
+     * @return: java.util.List<com.sky.vo.DishItemVO>
+     **/
+    @Override
+    public List<DishItemVO> getDishById(Long id) {
+        List<DishItemVO> list = setmealMapper.getDishById(id);
+        return list;
     }
 }

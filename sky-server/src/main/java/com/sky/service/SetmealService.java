@@ -4,6 +4,7 @@ import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.result.PageResult;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 
 import java.util.List;
@@ -73,5 +74,14 @@ public interface SetmealService {
      * @param: categoryId
      * @return: java.util.List<com.sky.entity.Setmeal>
      **/
-    List<Setmeal> getByCategoryId(int categoryId);
+    List<Setmeal> getByCategoryId(Long categoryId);
+
+    /**
+     * @description: 根据套餐id查询包含的菜品
+     * @author: CyberAstra
+     * @date: 2025/6/21 at 20:36:36
+     * @param: id
+     * @return: java.util.List<com.sky.vo.DishItemVO>
+     **/
+    List<DishItemVO> getDishById(Long id);
 }
