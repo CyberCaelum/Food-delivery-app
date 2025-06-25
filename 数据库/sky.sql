@@ -26,20 +26,22 @@ CREATE TABLE `category` (
   `type` int DEFAULT NULL COMMENT '类型   1 菜品分类 2 套餐分类',
   `name` varchar(32) COLLATE utf8_bin NOT NULL COMMENT '分类名称',
   `status` int DEFAULT NULL COMMENT '分类状态 0:禁用，1:启用',
+  `sort` int NOT NULL DEFAULT '0' COMMENT '顺序',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_category_name` (`name`)
+  UNIQUE KEY `idx_category_name` (`name`),
+  UNIQUE KEY `sort` (`sort`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin COMMENT='菜品及套餐分类';
 
-INSERT INTO `category` VALUES (11,1,'酒水饮料',1);
-INSERT INTO `category` VALUES (12,1,'传统主食',1);
-INSERT INTO `category` VALUES (13,2,'人气套餐',1);
-INSERT INTO `category` VALUES (15,2,'商务套餐',1);
-INSERT INTO `category` VALUES (16,1,'蜀味烤鱼',1);
-INSERT INTO `category` VALUES (17,1,'蜀味牛蛙',1);
-INSERT INTO `category` VALUES (18,1,'特色蒸菜',1);
-INSERT INTO `category` VALUES (19,1,'新鲜时蔬',1);
-INSERT INTO `category` VALUES (20,1,'水煮鱼',1);
-INSERT INTO `category` VALUES (21,1,'汤类',1);
+INSERT INTO `category` VALUES (11,1,'酒水饮料',1,1);
+INSERT INTO `category` VALUES (12,1,'传统主食',1,2);
+INSERT INTO `category` VALUES (13,2,'人气套餐',1,3);
+INSERT INTO `category` VALUES (15,2,'商务套餐',1,4);
+INSERT INTO `category` VALUES (16,1,'蜀味烤鱼',1,5);
+INSERT INTO `category` VALUES (17,1,'蜀味牛蛙',1,6);
+INSERT INTO `category` VALUES (18,1,'特色蒸菜',1,7);
+INSERT INTO `category` VALUES (19,1,'新鲜时蔬',1,8);
+INSERT INTO `category` VALUES (20,1,'水煮鱼',1,9);
+INSERT INTO `category` VALUES (21,1,'汤类',1,10);
 
 DROP TABLE IF EXISTS `dish`;
 CREATE TABLE `dish` (
