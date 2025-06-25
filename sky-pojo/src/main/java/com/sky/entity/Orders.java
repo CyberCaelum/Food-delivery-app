@@ -45,12 +45,6 @@ public class Orders implements Serializable {
     //订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消 7退款
     private Integer status;
 
-    //下单用户id
-    private Long userId;
-
-    //地址id
-    private Long addressBookId;
-
     //下单时间
     private LocalDateTime orderTime;
 

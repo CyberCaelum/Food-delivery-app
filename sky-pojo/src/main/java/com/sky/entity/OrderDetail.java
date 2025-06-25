@@ -33,6 +33,9 @@ public class OrderDetail implements Serializable {
     //套餐id
     private Long setmealId;
 
+    //用户id
+    private Long userId;
+
     //口味
     private String dishFlavor;
 
