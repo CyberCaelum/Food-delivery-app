@@ -6,12 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -19,6 +21,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -89,15 +92,27 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 
-        // 修正静态资源映射
+        // 静态资源映射（排除/api路径）
         registry.addResourceHandler("/**")
                 .addResourceLocations(
-                        "classpath:/static/",          // Vue/React 构建文件
-                        "classpath:/public/",          // 备用目录
-                        "classpath:/resources/",       // 备用目录
+                        "classpath:/static/",
+                        "classpath:/public/",
+                        "classpath:/resources/",
                         "classpath:/META-INF/resources/"
                 )
-                .setCachePeriod(0);
+                .setCachePeriod(0)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver() {
+                    @Override
+                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        // 排除API路径
+                        if (resourcePath.startsWith("api/")) {
+                            return null;
+                        }
+                        return super.getResource(resourcePath, location);
+                    }
+                });
+
 
         // 添加欢迎页映射
         registry.addResourceHandler("/")

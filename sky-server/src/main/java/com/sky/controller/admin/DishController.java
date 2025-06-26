@@ -22,7 +22,7 @@ import java.util.List;
  * @Date: 2025-05-19 14:47
  */
 @RestController
-@RequestMapping("/admin/dish")
+@RequestMapping("/api/dish")
 @Slf4j
 @Api(tags = "菜品相关接口")
 public class DishController {

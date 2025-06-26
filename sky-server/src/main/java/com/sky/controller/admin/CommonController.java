@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @Date: 2025-05-18 21:01
  */
 @RestController
-@RequestMapping("/admin/common")
+@RequestMapping("/api/common")
 @Slf4j
 @Api(tags = "通用接口")
 public class CommonController {
