@@ -13,6 +13,7 @@
                 and type = #{type}
             </if>
         </where>
+        order by sort
     </select>
 
     <update id="updateCategory">
@@ -40,5 +41,6 @@
         <if test="type != null">
             and type = #{type}
         </if>
+        order by sort
     </select>
 </mapper>

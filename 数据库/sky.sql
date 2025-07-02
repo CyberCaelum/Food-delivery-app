@@ -185,6 +185,8 @@ CREATE TABLE `setmeal` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_setmeal_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin COMMENT='套餐';
+INSERT INTO sky_take_out.setmeal (id, category_id, name, price, status, description, image) VALUES (32, 13, '肉食套餐', 170.00, 0, '好吃不贵', 'https://cybercaelum.oss-cn-beijing.aliyuncs.com/5b3150a8-7255-4fa1-92f4-6716bae1c065.jpg');
+INSERT INTO sky_take_out.setmeal (id, category_id, name, price, status, description, image) VALUES (33, 15, '素食套餐', 230.00, 0, '好吃不贵', 'https://cybercaelum.oss-cn-beijing.aliyuncs.com/6a896f44-ce55-4e3b-8f3e-6435b40d070c.jpg');
 
 DROP TABLE IF EXISTS `setmeal_dish`;
 CREATE TABLE `setmeal_dish` (
@@ -196,6 +198,15 @@ CREATE TABLE `setmeal_dish` (
   `price` decimal(10,2) DEFAULT NULL COMMENT '菜品单价（冗余字段）',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin COMMENT='套餐菜品关系';
+INSERT INTO sky_take_out.setmeal_dish (id, setmeal_id, dish_id, name, price, copies) VALUES (47, 32, 60, '梅菜扣肉', 58.00, 1);
+INSERT INTO sky_take_out.setmeal_dish (id, setmeal_id, dish_id, name, price, copies) VALUES (48, 32, 59, '东坡肘子', 138.00, 1);
+INSERT INTO sky_take_out.setmeal_dish (id, setmeal_id, dish_id, name, price, copies) VALUES (49, 33, 49, '米饭', 2.00, 3);
+INSERT INTO sky_take_out.setmeal_dish (id, setmeal_id, dish_id, name, price, copies) VALUES (50, 33, 68, '鸡蛋汤', 4.00, 1);
+INSERT INTO sky_take_out.setmeal_dish (id, setmeal_id, dish_id, name, price, copies) VALUES (51, 33, 69, '平菇豆腐汤', 6.00, 1);
+INSERT INTO sky_take_out.setmeal_dish (id, setmeal_id, dish_id, name, price, copies) VALUES (52, 33, 54, '清炒小油菜', 18.00, 1);
+INSERT INTO sky_take_out.setmeal_dish (id, setmeal_id, dish_id, name, price, copies) VALUES (53, 33, 57, '炝炒圆白菜', 18.00, 1);
+INSERT INTO sky_take_out.setmeal_dish (id, setmeal_id, dish_id, name, price, copies) VALUES (54, 33, 56, '清炒西兰花', 18.00, 1);
+INSERT INTO sky_take_out.setmeal_dish (id, setmeal_id, dish_id, name, price, copies) VALUES (55, 33, 55, '蒜蓉娃娃菜', 18.00, 1);
 
 DROP TABLE IF EXISTS `shopping_cart`;
 CREATE TABLE `shopping_cart` (

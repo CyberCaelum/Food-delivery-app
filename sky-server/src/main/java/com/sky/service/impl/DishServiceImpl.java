@@ -51,7 +51,6 @@ public class DishServiceImpl implements DishService {
      * @param: dishDTO
      **/
     @Transactional
-    @AutoFill(value = OperationType.INSERT)
     @Override
     public void saveWithFlavor(DishDTO dishDTO) {
         Dish dish = new Dish();
@@ -159,7 +158,6 @@ public class DishServiceImpl implements DishService {
      * @param: dishDTO
      **/
     @Transactional
-    @AutoFill(value = OperationType.UPDATE)
     @Override
     public void updateDish(DishDTO dishDTO) {
         Dish dish = new Dish();
