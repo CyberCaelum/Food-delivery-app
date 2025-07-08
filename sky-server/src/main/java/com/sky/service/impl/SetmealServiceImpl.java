@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * @ClassName : SetmealServiceImpl
- * @Description : 套餐分页查询service
+ * @Description : 套餐service
  * @Author :  CyberCaelum
  * @Date: 2025-05-23 19:35
  */
