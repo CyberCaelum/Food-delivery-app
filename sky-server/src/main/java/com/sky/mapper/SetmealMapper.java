@@ -97,7 +97,7 @@ public interface SetmealMapper {
      * @param: categoryId
      * @return: java.util.List<com.sky.entity.Setmeal>
      **/
-    @Select("select * from setmeal where category_id = #{categoryId}")
+    @Select("select * from setmeal where category_id = #{categoryId} and status = 1")
     List<Setmeal> getByCategoryId(Long categoryId);
 
     /**
