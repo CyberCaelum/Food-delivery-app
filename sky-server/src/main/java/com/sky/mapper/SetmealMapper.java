@@ -98,7 +98,7 @@ public interface SetmealMapper {
      * @return: java.util.List<com.sky.entity.Setmeal>
      **/
     @Select("select * from setmeal where category_id = #{categoryId}")
-    List<Setmeal> getByCategoryId(int categoryId);
+    List<Setmeal> getByCategoryId(Long categoryId);
 
     /**
      * @description: 根据套餐id查询包含的菜品
@@ -109,5 +109,5 @@ public interface SetmealMapper {
      **/
     @Select("select dish.name as name,dish.description as description,dish.image as image," +
             "setmeal_dish.copies as copies from setmeal_dish,dish where setmeal_id = #{id} and dish_id = dish.id")
-    List<DishItemVO> getDishById(Integer id);
+    List<DishItemVO> getDishById(Long id);
 }

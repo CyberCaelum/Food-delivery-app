@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date: 2025-06-15 16:32
  */
 
-@RestController("userShopController")
+@RestController("UserShopController")
 @RequestMapping("/user/shop")
 @Api(tags = "用户店铺相关接口")
 @Slf4j

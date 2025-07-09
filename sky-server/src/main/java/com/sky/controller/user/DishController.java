@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ import java.util.List;
  * @Date: 2025-06-21 20:49
  */
 @Slf4j
-@RestController
+@RestController("UserDishController")
 @RequestMapping("/user/dish")
 @Api(tags = "C端菜品浏览接口")
 public class DishController {
@@ -28,10 +29,24 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @GetMapping("/list")
     @ApiOperation("根据分类id查询菜品")
     public Result getById(Long categoryId){
-        List<DishVO> list = dishService.getDishByCategory(categoryId);
+        //构造key
+        String key = "dish_"+categoryId;
+        //在redis中查询
+        List<DishVO> list = (List<DishVO>) redisTemplate.opsForValue().get(key);
+        //不为空直接返回
+        if(list != null && !list.isEmpty()){
+            return Result.success(list);
+        }
+        //为空查询数据库
+        list = dishService.getDishByCategory(categoryId);
+        //之后放入redis
+        redisTemplate.opsForValue().set(key,list);
         return Result.success(list);
     }
 }
