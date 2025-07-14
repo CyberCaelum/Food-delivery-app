@@ -30,4 +30,14 @@ public interface UserMapper {
      * @param: user
      **/
     void insert(User user);
+
+    /**
+     * @description: 根据主键查找用户
+     * @author: CyberAstra
+     * @date: 2025/7/12 at 09:21:58
+     * @param: userId
+     * @return: com.sky.entity.User
+     **/
+    @Select(("select * from user where id = #{id}"))
+    User getById(Long userId);
 }
