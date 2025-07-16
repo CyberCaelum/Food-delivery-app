@@ -1,6 +1,9 @@
 package com.sky.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
+import com.sky.vo.*;
+import org.apache.commons.lang.RandomStringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
@@ -13,14 +16,12 @@ import com.sky.exception.OrderBusinessException;
 import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
+import com.sky.utils.MapUtil;
 import com.sky.utils.WeChatPayUtil;
-import com.sky.vo.OrderPaymentVO;
-import com.sky.vo.OrderStatisticsVO;
-import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springfox.documentation.spring.web.DocumentationCache;
@@ -62,16 +63,21 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private DocumentationCache resourceGroupCache;
 
+    @Value("${sky.gaode.key}")
+    private String GaodeKey;
+
+    @Value("${sky.shop.address}")
+    private String ShopAddress;
+
     /**
-     * @description:
+     * @description: 下订单
      * @author: CyberAstra
      * @date: 2025/7/12 at 09:10:06
      * @param: ordersSubmitDTO
      * @return: com.sky.vo.OrderSubmitVO
      **/
     @Transactional
-
-    public OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO) {
+    public OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO) throws Exception {
         //判断地址是否为空
         AddressBook addressBook = addressBookMapper.getById(ordersSubmitDTO.getAddressBookId());
         if (addressBook == null) {
@@ -84,6 +90,9 @@ public class OrderServiceImpl implements OrderService {
         if (list ==null || list.isEmpty()){
             throw new BaseException(MessageConstant.SHOPPING_CART_IS_NULL);
         }
+        String address = addressBook.getProvinceName()+addressBook.getCityName()
+                +addressBook.getDistrictName()+addressBook.getDetail();
+        checkOutOfRange(address);
         Orders orders = new Orders();
         //设置订单数据
         BeanUtils.copyProperties(ordersSubmitDTO,orders);
@@ -120,6 +129,66 @@ public class OrderServiceImpl implements OrderService {
         return orderSubmitVO;
     }
 
+    /**
+     * @description: 判断订单是否超出范围
+     * @author: CyberAstra
+     * @date: 2025/7/15 at 10:44:51
+     * @param: address
+     **/
+    public void checkOutOfRange(String address) throws Exception {
+        //获得商家经纬度
+        JSONObject shopAddress = MapUtil.getLatitudeLongitude(ShopAddress,GaodeKey);
+        log.info("商家信息：{}", shopAddress);
+        //判断请求状态
+        if (shopAddress.getString("status").equals("0") && !shopAddress.getString("infocode").equals("10000")) {
+            throw new OrderBusinessException("商家地址解析错误");
+        }
+        String shop = "";
+        //获得第一个数据
+        if (shopAddress.has("geocodes") && shopAddress.getJSONArray("geocodes").length() > 0) {
+            JSONObject firstPoi = shopAddress.getJSONArray("geocodes").getJSONObject(0);
+            shop = firstPoi.getString("location");
+        }
+        else {
+            throw new OrderBusinessException("商家地址解析错误");
+        }
+
+        //获得用户经纬度
+        JSONObject userAddress = MapUtil.getLatitudeLongitude(address,GaodeKey);
+        log.info("用户信息：{}",userAddress);
+        //判断请求状态
+        if (userAddress.getString("status").equals("0") && !userAddress.getString("infocode").equals("10000")) {
+            throw new OrderBusinessException("用户地址解析错误");
+        }
+        String user = "";
+        //获得第一个数据
+        if (userAddress.has("geocodes") && userAddress.getJSONArray("geocodes").length() > 0) {
+            JSONObject firstPoi = userAddress.getJSONArray("geocodes").getJSONObject(0);
+            user = firstPoi.getString("location");
+        }
+        else {
+            throw new OrderBusinessException("用户地址解析错误");
+        }
+
+        //获得路径信息
+        JSONObject path = MapUtil.getRouteInformation(shop,user,GaodeKey);
+        log.info("路径信息：{}",path);
+        //判断请求状态
+        if (path.getString("status").equals("0") && !path.getString("infocode").equals("10000")) {
+            throw new OrderBusinessException("路径解析错误");
+        }
+        //获得路径长度
+
+        String length = "";
+        if (path.has("route") && path.getJSONObject("route").length() > 0) {
+            JSONObject firstPoi = path.getJSONObject("route");
+            length = firstPoi.getJSONArray("paths").getJSONObject(0).getString("distance");
+        }
+        if(Double.parseDouble(length) > 5000){
+            //配送距离超过5000米
+            throw new OrderBusinessException("超出配送范围");
+        }
+    }
 
     /**
      * 订单支付
@@ -142,12 +211,17 @@ public class OrderServiceImpl implements OrderService {
 //
 //        if (jsonObject.getString("code") != null && jsonObject.getString("code").equals("ORDERPAID")) {
 //            throw new OrderBusinessException("该订单已支付");
-//        }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", "ORDERPAID");
-        OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
-        vo.setPackageStr(jsonObject.getString("package"));
+//        }不造对不对
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("code", "ORDERPAID");
+//        OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
+//        vo.setPackageStr(jsonObject.getString("package"));
 
+        String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);
+        String nonceStr = RandomStringUtils.randomNumeric(32);
+        OrderPaymentVO orderPaymentVO = new OrderPaymentVO();
+        orderPaymentVO.setTimeStamp(timeStamp);
+        orderPaymentVO.setNonceStr(nonceStr);
         //为替代微信支付成功后的数据库订单状态更新，多定义一个方法进行修改
         Integer OrderPaidStatus = Orders.PAID; //支付状态，已支付
         Integer OrderStatus = Orders.TO_BE_CONFIRMED;  //订单状态，待接单
@@ -161,7 +235,7 @@ public class OrderServiceImpl implements OrderService {
         log.info("调用updateStatus，用于替换微信支付更新数据库状态的问题");
         orderMapper.updateStatus(OrderStatus, OrderPaidStatus, check_out_time, orderNumber);
 
-        return vo;
+        return orderPaymentVO;
     }
 
     /**
@@ -272,6 +346,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * @description: 查看订单详情和订单信息
+     * @author: CyberAstra
+     * @date: 2025/7/15 at 15:51:19
+     * @param: id
+     * @return: com.sky.vo.OrderDetailVO
+     **/
+    public OrderDetailVO detail(Long id) {
+        OrderDetailVO orderDetailVO = new OrderDetailVO();
+        Orders orders = orderMapper.getById(id);
+        BeanUtils.copyProperties(orders,orderDetailVO);
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(id);
+        orderDetailVO.setOrderDetailList(orderDetailList);
+        return orderDetailVO;
+    }
+
+    /**
      * @description: 再来一单
      * @author: CyberAstra
      * @date: 2025/7/12 at 15:59:04
@@ -305,20 +395,22 @@ public class OrderServiceImpl implements OrderService {
         PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
         //查找订单信息
         Page<Orders> page = orderMapper.select(ordersPageQueryDTO);
-        List<OrderVO> list = new ArrayList<>();
+        List<OrderDetailVO> list = new ArrayList<>();
         //查找订单详情
         for (Orders order : page) {
-            OrderVO orderVO = new OrderVO();
+            OrderDetailVO orderDetailVO = new OrderDetailVO();
             List<OrderDetail> orderDetails = orderDetailMapper.getByOrderId(order.getId());
             //将商品信息字符串化
-            String dishes = "";
-            for (OrderDetail orderDetail : orderDetails) {
-                dishes = orderDetail.getName() + "*" + orderDetail.getNumber() + ";";
-            }
-            orderVO.setOrderDishes(dishes);
+//            String dishes = "";
+//            for (OrderDetail orderDetail : orderDetails) {
+//                dishes = orderDetail.getName() + "*" + orderDetail.getNumber() + ";";
+//            }
+//            orderVO.setOrderDishes(dishes);
+            BeanUtils.copyProperties(order,orderDetailVO);
+            List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(order.getId());
             //将返回的订单列表中的订单详情设置为查询出来的列表
-            orderVO.setOrderDetailList(orderDetails);
-            list.add(orderVO);
+            orderDetailVO.setOrderDetailList(orderDetails);
+            list.add(orderDetailVO);
         }
         return new PageResult(page.getTotal(),list);
     }
@@ -334,7 +426,7 @@ public class OrderServiceImpl implements OrderService {
         Integer a = orderMapper.statistics(Orders.CONFIRMED);
         Integer b = orderMapper.statistics(Orders.DELIVERY_IN_PROGRESS);
         Integer c = orderMapper.statistics(Orders.TO_BE_CONFIRMED);
-        return new OrderStatisticsVO(a,b,c);
+        return new OrderStatisticsVO(c,a,b);
     }
 
     /**

@@ -2,10 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.*;
 import com.sky.result.PageResult;
-import com.sky.vo.OrderPaymentVO;
-import com.sky.vo.OrderStatisticsVO;
-import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
+import com.sky.vo.*;
 
 /**
  * @ClassName : OrderService
@@ -23,7 +20,7 @@ public interface OrderService {
      * @param: ordersSubmitDTO
      * @return: com.sky.vo.OrderSubmitVO
      **/
-    OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO);
+    OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO) throws Exception;
 
     /**
      * 订单支付
@@ -74,6 +71,14 @@ public interface OrderService {
      **/
     void repetition(Long id);
 
+    /**
+     * @description: 查看订单详情和订单信息
+     * @author: CyberAstra
+     * @date: 2025/7/15 at 15:50:54
+     * @param: id
+     * @return: com.sky.vo.OrderDetailVO
+     **/
+    OrderDetailVO detail(Long id);
     /**
      * @description: 订单搜索
      * @author: CyberAstra

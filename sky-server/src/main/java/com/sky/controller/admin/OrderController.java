@@ -7,6 +7,7 @@ import com.sky.dto.OrdersRejectionDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderDetailVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
@@ -68,8 +69,8 @@ public class OrderController {
     @ApiOperation("查询订单详情")
     @GetMapping("/details/{id}")
     public Result details(@PathVariable Long id){
-        OrderVO orderVO = orderService.details(id);
-        return Result.success(orderVO);
+        OrderDetailVO orderDetailVO = orderService.detail(id);
+        return Result.success(orderDetailVO);
     }
 
     /**

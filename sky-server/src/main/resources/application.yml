@@ -46,15 +46,22 @@ sky:
     admin-token-name: token
     user-token-name: authentication
     #阿里云配置
-    alioss:
-      endpoint: ${sky.alioss.endpoint}
-      access-key-id: ${sky.alioss.access-key-id}
-      access-key-secret: ${sky.alioss.access-key-secret}
-      bucket-name: ${sky.alioss.bucket-name}
+  alioss:
+    endpoint: ${sky.alioss.endpoint}
+    access-key-id: ${sky.alioss.access-key-id}
+    access-key-secret: ${sky.alioss.access-key-secret}
+    bucket-name: ${sky.alioss.bucket-name}
+#高德地图api
+  gaode:
+    key: ${sky.gaode.key}
+  #店铺地址
+  shop:
+    address: ${sky.shop.address}
+
   #微信配置
   wechat:
     appid: ${sky.wechat.appid}
-    secret:  ${sky.wechat.secret}
+    secret: ${sky.wechat.secret}
 #    mchid: ${sky.wechat.mchid}
 #    mchSerialNo: ${sky.wechat.mchSerialNo}
 #    privateKeyFilePath: ${sky.wechat.privateKeyFilePath}

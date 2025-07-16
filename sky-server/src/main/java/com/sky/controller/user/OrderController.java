@@ -8,6 +8,7 @@ import com.sky.mapper.OrderMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderDetailVO;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
@@ -43,7 +44,7 @@ public class OrderController {
      **/
     @ApiOperation("用户下单")
     @PostMapping("/submit")
-    public Result submit(@RequestBody OrdersSubmitDTO ordersSubmitDTO){
+    public Result submit(@RequestBody OrdersSubmitDTO ordersSubmitDTO) throws Exception {
         log.info("订单信息：{}",ordersSubmitDTO);
         OrderSubmitVO orderSubmitVO = orderService.submit(ordersSubmitDTO);
         return Result.success(orderSubmitVO);
@@ -64,7 +65,7 @@ public class OrderController {
 
         OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
         log.info("生成预支付交易单：{}", orderPaymentVO);
-        return Result.success(new OrderPaymentVO());
+        return Result.success(orderPaymentVO);
     }
 
     /**
@@ -107,8 +108,8 @@ public class OrderController {
     @ApiOperation("查看订单详情")
     @GetMapping("/orderDetail/{id}")
     public Result details(@PathVariable Long id) {
-        OrderVO orderVO = orderService.details(id);
-        return Result.success(orderVO);
+        OrderDetailVO detailDetailVO = orderService.detail(id);
+        return Result.success(detailDetailVO);
     }
 
     /**
