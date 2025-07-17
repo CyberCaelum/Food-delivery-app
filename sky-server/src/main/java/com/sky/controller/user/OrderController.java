@@ -126,10 +126,17 @@ public class OrderController {
         return Result.success();
     }
 
+    /**
+     * @description: 用户催单
+     * @author: CyberAstra
+     * @date: 2025/7/16 at 16:07:04
+     * @param: id
+     * @return: com.sky.result.Result
+     **/
     @ApiOperation("用户催单")
     @GetMapping("/reminder/{id}")
     public Result reminder(@PathVariable Long id){
-
+        orderService.reminder(id);
         return Result.success();
     }
 }

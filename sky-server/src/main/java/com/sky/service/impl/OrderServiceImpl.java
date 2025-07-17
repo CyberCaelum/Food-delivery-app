@@ -1,6 +1,8 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.sky.vo.*;
+import com.sky.websocket.WebSocketServer;
 import org.apache.commons.lang.RandomStringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,9 +30,7 @@ import springfox.documentation.spring.web.DocumentationCache;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @ClassName : OrderServiceImpl
@@ -60,8 +60,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private UserMapper userMapper;
+
     @Autowired
     private DocumentationCache resourceGroupCache;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     @Value("${sky.gaode.key}")
     private String GaodeKey;
@@ -211,7 +215,7 @@ public class OrderServiceImpl implements OrderService {
 //
 //        if (jsonObject.getString("code") != null && jsonObject.getString("code").equals("ORDERPAID")) {
 //            throw new OrderBusinessException("该订单已支付");
-//        }不造对不对
+//        }
 //        JSONObject jsonObject = new JSONObject();
 //        jsonObject.put("code", "ORDERPAID");
 //        OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
@@ -231,7 +235,14 @@ public class OrderServiceImpl implements OrderService {
 
         //获取订单号码
         String orderNumber = ordersPaymentDTO.getOrderNumber();
-
+        //给商户来单提醒
+        Map map = new HashMap<>();
+        map.put("type",1);
+        map.put("orderId",orderMapper.getByNumber(orderNumber).getId());
+        map.put("content","订单号："+orderNumber);
+        String string = JSON.toJSONString(map);
+        //发送提醒
+        webSocketServer.sendToAllClient(string);
         log.info("调用updateStatus，用于替换微信支付更新数据库状态的问题");
         orderMapper.updateStatus(OrderStatus, OrderPaidStatus, check_out_time, orderNumber);
 
@@ -539,5 +550,25 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(Orders.COMPLETED);
         order.setDeliveryTime(LocalDateTime.now());
         orderMapper.update(order);
+    }
+
+    /**
+     * @description: 用户催单
+     * @author: CyberAstra
+     * @date: 2025/7/16 at 16:07:43
+     * @param: id
+     **/
+    @Override
+    public void reminder(Long id) {
+        Orders order = orderMapper.getById(id);
+        if (order == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        Map map = new HashMap<>();
+        map.put("type",1);
+        map.put("orderId",id);
+        map.put("content","订单号："+order.getNumber());
+        String string = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(string);
     }
 }

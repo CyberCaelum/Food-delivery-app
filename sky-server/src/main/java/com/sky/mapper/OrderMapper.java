@@ -41,7 +41,7 @@ public interface OrderMapper {
     void update(Orders orders);
 
     /**
-     * @description: 更新订单
+     * @description: 更新订单支付状态
      * @author: CyberAstra
      * @date: 2025/7/12 at 09:48:57
      * @param: orderStatus
@@ -91,4 +91,19 @@ public interface OrderMapper {
      **/
     @Select("select count(*) from orders where status = #{status}")
     Integer statistics(Integer status);
+
+    /**
+     * @description: 更新超时订单信息
+     * @author: CyberAstra
+     * @date: 2025/7/16 at 09:05:39
+     * @param: status
+     * @param: reason
+     * @param: localDateTime
+     * @param: time
+     **/
+    @Update("update orders set status = #{status}," +
+            "cancel_reason = #{reason},cancel_time = #{time} where order_time < #{localDateTime}")
+    void updateTimeOuntOrder(Integer status,String reason,LocalDateTime localDateTime,LocalDateTime time);
+
+
 }

@@ -135,4 +135,12 @@ public interface OrderService {
      * @param: id
      **/
     void complete(Long id);
+
+    /**
+     * @description: 用户催单
+     * @author: CyberAstra
+     * @date: 2025/7/16 at 16:07:32
+     * @param: id
+     **/
+    void reminder(Long id);
 }
