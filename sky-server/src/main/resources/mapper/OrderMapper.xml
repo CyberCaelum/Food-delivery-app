@@ -81,5 +81,14 @@
         </where>
         order by order_time desc
     </select>
+    <select id="getOrderCount" resultType="java.lang.Integer">
+        select count(*) from orders
+        <where>
+            date(orders.order_time) = #{date}
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
 
 </mapper>

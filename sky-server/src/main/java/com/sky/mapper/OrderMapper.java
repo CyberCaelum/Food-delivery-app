@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -105,5 +106,36 @@ public interface OrderMapper {
             "cancel_reason = #{reason},cancel_time = #{time} where order_time < #{localDateTime}")
     void updateTimeOuntOrder(Integer status,String reason,LocalDateTime localDateTime,LocalDateTime time);
 
+    /**
+     * @description: 获取营业额
+     * @author: CyberAstra
+     * @date: 2025/7/18 at 09:16:51
+     * @param: dates
+     * @param: status
+     * @return: java.util.List<java.lang.Float>
+     **/
+    @Select("select sum(amount) from orders where date(order_time) = #{date} and status = #{status}")
+    Double getAmounts(LocalDate date, Integer status);
 
+    /**
+     * @description: 获得指定状态的订单数量
+     * @author: CyberAstra
+     * @date: 2025/7/18 at 14:45:03
+     * @param: date
+     * @param: status
+     * @return: java.lang.Integer
+     **/
+    Integer getOrderCount(LocalDate date, Integer status);
+
+    /**
+     * @description: 完单人数
+     * @author: CyberAstra
+     * @date: 2025/7/18 at 16:36:35
+     * @param: now
+     * @param: completed
+     * @return: java.lang.Integer
+     **/
+    @Select("select count(*) from orders where date(order_time) = #{date} and status = #{status} " +
+            "group by user_id")
+    Integer getOrderUser(LocalDate now, Integer completed);
 }
