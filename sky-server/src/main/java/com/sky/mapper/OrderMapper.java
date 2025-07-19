@@ -114,7 +114,7 @@ public interface OrderMapper {
      * @param: status
      * @return: java.util.List<java.lang.Float>
      **/
-    @Select("select sum(amount) from orders where date(order_time) = #{date} and status = #{status}")
+    @Select("select coalesce(sum(amount), 0) from orders where date(order_time) = #{date} and status = #{status}")
     Double getAmounts(LocalDate date, Integer status);
 
     /**
@@ -135,7 +135,6 @@ public interface OrderMapper {
      * @param: completed
      * @return: java.lang.Integer
      **/
-    @Select("select count(*) from orders where date(order_time) = #{date} and status = #{status} " +
-            "group by user_id")
+    @Select("select coalesce(count(DISTINCT user_id), 0) from orders where date(order_time) = #{date} and status = #{status}")
     Integer getOrderUser(LocalDate date, Integer status);
 }

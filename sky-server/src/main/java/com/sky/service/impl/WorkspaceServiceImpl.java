@@ -43,24 +43,27 @@ public class WorkspaceServiceImpl implements WorkspaceService {
      * @return: com.sky.vo.BusinessDataVO
      **/
     @Override
-    public BusinessDataVO businessData() {
+    public BusinessDataVO businessData(LocalDate date) {
         //新用户
-        Integer newAmount = userMapper.getNewAmount(LocalDate.now());
+        Integer newAmount = userMapper.getNewAmount(date);
         //完成的订单数量
-        Integer completedOrder = orderMapper.getOrderCount(LocalDate.now(), Orders.COMPLETED);
+        Integer completedOrder = orderMapper.getOrderCount(date, Orders.COMPLETED);
         //全部的订单数量
-        Integer totalOrder = orderMapper.getOrderCount(LocalDate.now(), null);
+        Integer totalOrder = orderMapper.getOrderCount(date, null);
         //完成率
         Double orderCompletionRate = 0.0;
         if (totalOrder > 0){
             orderCompletionRate = (double)completedOrder/totalOrder;
         }
         //获得营业额
-        Double amounts = orderMapper.getAmounts(LocalDate.now(), Orders.COMPLETED);
+        Double amounts = orderMapper.getAmounts(date, Orders.COMPLETED);
         //完单人数
-        Integer num = orderMapper.getOrderUser(LocalDate.now(), Orders.COMPLETED);
+        Integer num = orderMapper.getOrderUser(date, Orders.COMPLETED);
         //平均客价
-        Double unitPrice = amounts/num;
+        Double unitPrice = 0.0;
+        if (num > 0){
+            unitPrice = amounts/num;
+        }
         return BusinessDataVO
                 .builder()
                 .orderCompletionRate(orderCompletionRate)

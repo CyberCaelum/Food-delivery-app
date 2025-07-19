@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeoutException;
@@ -98,5 +99,18 @@ public class ReportController {
         SalesTop10ReportVO vo = reportService.top10(begin,end);
         log.info("信息:{}",vo);
         return Result.success(vo);
+    }
+
+    /**
+     * @description: 导出Excel报表接口
+     * @author: CyberAstra
+     * @date: 2025/7/19 at 15:49:18
+     * @param: response
+     **/
+    @ApiOperation("导出Excel报表接口")
+    @GetMapping("/export")
+    public void export(HttpServletResponse response){
+        log.info("导出Excel报表");
+        reportService.export(response);
     }
 }

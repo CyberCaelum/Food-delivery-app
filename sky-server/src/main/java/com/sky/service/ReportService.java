@@ -5,8 +5,8 @@ import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -56,4 +56,12 @@ public interface ReportService {
      * @return: com.sky.vo.SalesTop10ReportVO
      **/
     SalesTop10ReportVO top10(LocalDate begin, LocalDate end);
+
+    /**
+     * @description: 导出Excel报表接口
+     * @author: CyberAstra
+     * @date: 2025/7/19 at 15:50:56
+     * @param: response
+     **/
+    void export(HttpServletResponse response);
 }
