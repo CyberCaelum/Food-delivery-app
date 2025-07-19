@@ -137,5 +137,5 @@ public interface OrderMapper {
      **/
     @Select("select count(*) from orders where date(order_time) = #{date} and status = #{status} " +
             "group by user_id")
-    Integer getOrderUser(LocalDate now, Integer completed);
+    Integer getOrderUser(LocalDate date, Integer status);
 }

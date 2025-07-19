@@ -89,4 +89,13 @@ public interface DishMapper {
     @AutoFill(value = OperationType.UPDATE)
     void update(Dish dish);
 
+    /**
+     * @description: 获得不同状态的菜品数量
+     * @author: CyberAstra
+     * @date: 2025/7/19 at 08:01:41
+     * @param: status
+     * @return: java.lang.Integer
+     **/
+    @Select("select count(*) from dish where status = #{status}")
+    Integer getStatusCount(Integer status);
 }

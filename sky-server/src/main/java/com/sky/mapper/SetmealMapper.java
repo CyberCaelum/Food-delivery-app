@@ -110,4 +110,14 @@ public interface SetmealMapper {
     @Select("select dish.name as name,dish.description as description,dish.image as image," +
             "setmeal_dish.copies as copies from setmeal_dish,dish where setmeal_id = #{id} and dish_id = dish.id")
     List<DishItemVO> getDishById(Long id);
+
+    /**
+     * @description: 查询套餐中不同状态的套餐数量
+     * @author: CyberAstra
+     * @date: 2025/7/19 at 07:55:39
+     * @param: status
+     * @return: java.lang.Integer
+     **/
+    @Select("select count(*) from setmeal where status = #{status}")
+    Integer getStatusCount(Integer status);
 }
