@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.EmployeeChangePasswordDTO;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -150,6 +151,21 @@ public class EmployeeController {
     public Result update(@RequestBody EmployeeDTO employeeDTO) {
         log.info("修改员工：{}", employeeDTO);
         employeeService.update(employeeDTO);
+        return Result.success();
+    }
+
+    /**
+     * @description: 修改密码
+     * @author: CyberAstra
+     * @date: 2025/7/21 at 17:24:29
+     * @param: employeeChangePasswordDTO
+     * @return: com.sky.result.Result
+     **/
+    @ApiOperation("修改密码")
+    @PutMapping("/editPassword")
+    public Result editPassword(@RequestBody EmployeeChangePasswordDTO employeeChangePasswordDTO){
+        log.info("修改密码{}", employeeChangePasswordDTO);
+        employeeService.changePassword(employeeChangePasswordDTO);
         return Result.success();
     }
 }

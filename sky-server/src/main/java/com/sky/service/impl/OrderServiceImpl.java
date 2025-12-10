@@ -182,11 +182,13 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderBusinessException("路径解析错误");
         }
         //获得路径长度
-
         String length = "";
         if (path.has("route") && path.getJSONObject("route").length() > 0) {
             JSONObject firstPoi = path.getJSONObject("route");
             length = firstPoi.getJSONArray("paths").getJSONObject(0).getString("distance");
+        }
+        else {
+            throw new OrderBusinessException("路径解析错误");
         }
         if(Double.parseDouble(length) > 5000){
             //配送距离超过5000米

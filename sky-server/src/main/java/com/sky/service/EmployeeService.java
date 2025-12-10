@@ -1,5 +1,6 @@
 package com.sky.service;
 
+import com.sky.dto.EmployeeChangePasswordDTO;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -57,4 +58,12 @@ public interface EmployeeService {
      * @param: employeeDTO
      **/
     void update(EmployeeDTO employeeDTO);
+
+    /**
+     * @description: 修改密码
+     * @author: CyberAstra
+     * @date: 2025/7/21 at 17:24:43
+     * @param: employeeChangePasswordDTO
+     **/
+    void changePassword(EmployeeChangePasswordDTO employeeChangePasswordDTO);
 }

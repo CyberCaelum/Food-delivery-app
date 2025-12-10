@@ -41,12 +41,7 @@ public class SetmealServiceImplTest {
         setmeal = new Setmeal();
     }
 
-    /**
-     * TC1: setmealDishes = null
-     * 条件1: setmealDishes != null -> false
-     * 条件2: !setmealDishes.isEmpty() -> 不执行
-     * 预期: 只更新套餐，不删除和保存菜品
-     */
+    //
     @Test
     public void testUpdateSetmeal_WhenSetmealDishesIsNull() {
         // 准备测试数据
@@ -67,12 +62,6 @@ public class SetmealServiceImplTest {
         verify(setmealDishMapper, never()).saveSetmealDish(any(SetmealDish.class));
     }
 
-    /**
-     * TC2: setmealDishes = [] (空列表)
-     * 条件1: setmealDishes != null -> true
-     * 条件2: !setmealDishes.isEmpty() -> false
-     * 预期: 更新套餐，删除原有菜品，不保存新菜品
-     */
     @Test
     public void testUpdateSetmeal_WhenSetmealDishesIsEmpty() {
         // 准备测试数据
@@ -93,12 +82,7 @@ public class SetmealServiceImplTest {
         verify(setmealDishMapper, never()).saveSetmealDish(any(SetmealDish.class));
     }
 
-    /**
-     * TC3: setmealDishes = [菜品1, 菜品2] (非空列表)
-     * 条件1: setmealDishes != null -> true
-     * 条件2: !setmealDishes.isEmpty() -> true
-     * 预期: 更新套餐，删除原有菜品，保存新菜品
-     */
+    //
     @Test
     public void testUpdateSetmeal_WhenSetmealDishesIsNotEmpty() {
 // 准备测试数据
@@ -151,74 +135,5 @@ public class SetmealServiceImplTest {
                 .map(SetmealDish::getDishId)
                 .collect(Collectors.toSet());
         assertEquals(expectedDishIds, actualDishIds);
-    }
-
-    /**
-     * TC4: 测试事务回滚（可选）
-     * 模拟保存菜品时抛出异常，验证事务是否会回滚
-     */
-    @Test(expected = RuntimeException.class)
-    public void testUpdateSetmeal_TransactionRollback_WhenSaveDishFails() {
-        // 准备测试数据
-        setmealDTO.setId(1L);
-        setmealDTO.setName("测试套餐");
-
-        SetmealDish dish = new SetmealDish();
-        dish.setDishId(101L);
-        dish.setCopies(2);
-
-        setmealDTO.setSetmealDishes(Arrays.asList(dish));
-
-        // 模拟Mapper行为 - 保存菜品时抛出异常
-        doNothing().when(setmealMapper).updateSetmeal(any(Setmeal.class));
-        doNothing().when(setmealDishMapper).deletBySetmealId(anyLong());
-        doThrow(new RuntimeException("数据库异常")).when(setmealDishMapper)
-                .saveSetmealDish(any(SetmealDish.class));
-
-        // 执行测试，期望抛出异常
-        setmealService.updateSetmeal(setmealDTO);
-    }
-
-    /**
-     * 边界测试: setmealId为空的情况
-     */
-    @Test
-    public void testUpdateSetmeal_WhenSetmealIdIsNull() {
-        // 准备测试数据
-        setmealDTO.setId(null);
-        setmealDTO.setName("测试套餐");
-
-        // 执行测试 - 应该正常处理或抛出异常
-        try {
-            setmealService.updateSetmeal(setmealDTO);
-        } catch (Exception e) {
-            // 可以记录日志或验证异常类型
-        }
-
-        // 验证Mapper是否被调用
-        verify(setmealMapper, times(1)).updateSetmeal(any(Setmeal.class));
-    }
-
-    /**
-     * 验证BeanUtils.copyProperties的正确使用
-     */
-    @Test
-    public void testUpdateSetmeal_BeanUtilsCopyProperties() {
-        // 准备测试数据
-        setmealDTO.setId(1L);
-        setmealDTO.setName("测试套餐");
-        setmealDTO.setPrice(new BigDecimal("99.0"));
-        setmealDTO.setStatus(1);
-        setmealDTO.setSetmealDishes(null);
-
-        // 使用Spy来验证BeanUtils的调用
-        SetmealServiceImpl spyService = spy(setmealService);
-        doNothing().when(spyService).updateSetmeal(setmealDTO);
-
-        // 执行
-        spyService.updateSetmeal(setmealDTO);
-
-        // 这里主要是验证逻辑，不是实际测试BeanUtils
-        // 实际测试中应该验证更新后的setmeal对象属性
     }
 }

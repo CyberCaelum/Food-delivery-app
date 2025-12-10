@@ -6,6 +6,7 @@ import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.EmployeeChangePasswordDTO;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -156,5 +157,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        employee.setUpdateTime(LocalDateTime.now());
 //        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.update(employee);
+    }
+
+    /**
+     * @description: 修改密码
+     * @author: CyberAstra
+     * @date: 2025/7/21 at 17:25:02
+     * @param: employeeChangePasswordDTO
+     **/
+    @Override
+    public void changePassword(EmployeeChangePasswordDTO employeeChangePasswordDTO) {
+        return;
     }
 }
