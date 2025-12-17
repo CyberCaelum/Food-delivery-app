@@ -468,7 +468,7 @@ public class OrderServiceImpl implements OrderService {
     public void rejection(OrdersRejectionDTO ordersRejectionDTO) throws Exception {
         Orders order = orderMapper.getById(ordersRejectionDTO.getId());
         //判断订单是否存在，以及是否接单
-        if (order == null && !order.getStatus().equals(Orders.CANCELLED)) {
+        if (order == null || order.getStatus().equals(Orders.CANCELLED)) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
 //        //判断用户是否付款,如果已经付款需要退款

@@ -1,5 +1,8 @@
 package com.sky.service.impl;
 
+import com.sky.dto.OrdersRejectionDTO;
+import com.sky.entity.Orders;
+import com.sky.mapper.OrderMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.sky.exception.OrderBusinessException;
@@ -8,16 +11,25 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.lang.reflect.Field;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.class)
 public class OrderServiceImplTest {
 
     private static final String SHOP_ADDRESS = "北京市海淀区";
     private static final String GAODE_KEY = "test_key_123456";
+
+    @Mock
+    private OrderMapper orderMapper;
 
     @InjectMocks
     private OrderServiceImpl orderService;
@@ -270,5 +282,29 @@ public class OrderServiceImplTest {
 
             orderService.checkOutOfRange("用户地址");
         }
+    }
+    @Test(expected = OrderBusinessException.class)
+    public void testRejection_OrderIsNull() throws Exception {
+        when(orderMapper.getById(any(Long.class))).thenReturn(null);
+        OrdersRejectionDTO ordersRejectionDTO = new OrdersRejectionDTO();
+        orderService.rejection(ordersRejectionDTO);
+    }
+    @Test(expected = OrderBusinessException.class)
+    public void testRejection_OrderStatusError() throws Exception {
+        Orders orders = new Orders();
+        orders.setStatus(Orders.CANCELLED);
+        when(orderMapper.getById(any(Long.class))).thenReturn(orders);
+        OrdersRejectionDTO ordersRejectionDTO = new OrdersRejectionDTO();
+        orderService.rejection(ordersRejectionDTO);
+    }
+    @Test
+    public void testRejection() throws Exception {
+        Orders orders = new Orders();
+        orders.setStatus(Orders.CONFIRMED);
+        when(orderMapper.getById(any(Long.class))).thenReturn(orders);
+        doNothing().when(orderMapper).update(any(Orders.class));
+        OrdersRejectionDTO ordersRejectionDTO = new OrdersRejectionDTO();
+        ordersRejectionDTO.setId(1L);
+        orderService.rejection(ordersRejectionDTO);
     }
 }
